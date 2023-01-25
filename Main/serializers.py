@@ -14,7 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
             instance = self.Meta.model(**user_data)
 
             if password is not None:
-                instance.make_password(password)
+                instance.set_password(password)
             instance.save()
             
             return instance
+
+
+# class ImageSerializer(serializers.erializer):
+        
+#         image_field = serializers.ImageField()

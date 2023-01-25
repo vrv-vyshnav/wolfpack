@@ -7,8 +7,9 @@ class User(AbstractUser):
     email = models.CharField(max_length=250, unique=True)
     password = models.CharField(max_length=250)
     username = None
-    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/')
     

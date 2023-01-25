@@ -6,16 +6,30 @@ from rest_framework.response import Response
 from .serializers import *
 import jwt
 import datetime
+from django.core.files.storage import default_storage
 
+JWT_SECRET="DFSDFDSFJ23LJ32"
 
 class RegisterView(APIView):
     def post(self, request):
         serializers = UserSerializer(data = request.data)
         serializers.is_valid(raise_exception = True)
         serializers.save()
-        return Response(serializers.data)
+        return Response({
+            'status' : 'ok',
+            'message' : 'Registered success'
+        })
 
 
+class ImageView(APIView):
+    def post(self,request):
+        image = request.FILES['image']
+        file_name = default_storage.save(image.name, image)
+        print(file_name)
+        return Response({
+            'msg' : 'success'
+        })
+        
 class LoginView(APIView):
 
     def post(self, request):
@@ -34,9 +48,11 @@ class LoginView(APIView):
             'id': user.id,
             # expired in  1 minute
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
+            'iat': datetime.datetime.utcnow(),
+            'email' : user.email,
+            'name' : user.name,
         }
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        token = jwt.encode(payload, serializersJWT_SECRET, algorithm='HS256')
         res = Response()
         res.set_cookie(key='jwt', value=token, httponly=True)
         res.data = {
