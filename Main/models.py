@@ -9,7 +9,3 @@ class User(AbstractUser):
     username = None
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
-    
